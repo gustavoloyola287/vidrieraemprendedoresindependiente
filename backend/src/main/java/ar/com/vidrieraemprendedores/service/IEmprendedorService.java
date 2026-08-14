@@ -1,7 +1,8 @@
 package ar.com.vidrieraemprendedores.service;
 
-import ar.com.vidrieraemprendedores.model.Emprendedor;
 import java.util.List;
+
+import ar.com.vidrieraemprendedores.models.Emprendedor;
 
 public interface IEmprendedorService {
     // Traer todos los emprendedores

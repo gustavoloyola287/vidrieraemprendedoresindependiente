@@ -1,9 +1,10 @@
 package ar.com.vidrieraemprendedores.repository;
 
-import ar.com.vidrieraemprendedores.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import ar.com.vidrieraemprendedores.models.Categoria;
+
 @Repository
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 }

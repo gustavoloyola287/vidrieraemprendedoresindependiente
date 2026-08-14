@@ -1,7 +1,8 @@
 package ar.com.vidrieraemprendedores.service;
 
-import ar.com.vidrieraemprendedores.model.Categoria;
 import java.util.List;
+
+import ar.com.vidrieraemprendedores.models.Categoria;
 
 public interface ICategoriaService {
     // Listar todas las categorías

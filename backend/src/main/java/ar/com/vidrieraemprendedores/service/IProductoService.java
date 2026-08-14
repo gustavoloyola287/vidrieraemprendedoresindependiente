@@ -1,7 +1,8 @@
 package ar.com.vidrieraemprendedores.service;
 
-import ar.com.vidrieraemprendedores.model.Producto;
 import java.util.List;
+
+import ar.com.vidrieraemprendedores.models.Producto;
 
 public interface IProductoService {
     // Listar todos los productos expuestos en la vidriera
