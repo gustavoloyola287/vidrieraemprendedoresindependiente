@@ -1,161 +1,124 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 
-function RegistroEmprendedor() {
-    const [nombreCompleto, setNombreCompleto] = useState("");
-    const [nombreEmprendimiento, setNombreEmprendimiento] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefono, setTelefono] = useState("");
-    const [clave, setClave] = useState("");
-    const [confirmarClave, setConfirmarClave] = useState("");
+export const Registro: React.FC = () => {
+  const [formData, setFormData] = useState({
+    nombreCompleto: '',
+    nombreEmprendimiento: '',
+    email: '',
+    telefono: '',
+    password: '',
+    confirmPassword: ''
+  });
 
-    const [error, setError] = useState("");
-    const [cargando, setCargando] = useState(false);
-    const [mensaje, setMensaje] = useState("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
-    function validarDatos(): boolean {
-        if (nombreCompleto.trim() === "") {
-            setError("Ingrese su nombre completo");
-            return false;
-        }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Lógica de registro
+  };
 
-        if (nombreEmprendimiento.trim() === "") {
-            setError("Ingrese el nombre de su emprendimiento");
-            return false;
-        }
+  return (
+    <div className="container py-5">
+      <div className="row justify-content-center align-items-center">
+        <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+          <div className="card shadow border-0 rounded-3 p-4 bg-white">
+            <h2 className="text-center fw-bold text-primary mb-4">Registrar emprendedor</h2>
 
-        if (email.trim() === "") {
-            setError("Ingrese su email");
-            return false;
-        }
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3 text-start">
+                <label className="form-label fw-semibold text-secondary">Nombre completo</label>
+                <input
+                  type="text"
+                  name="nombreCompleto"
+                  className="form-control"
+                  placeholder="Juan Pérez"
+                  value={formData.nombreCompleto}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        if (telefono.trim() === "") {
-            setError("Ingrese su teléfono");
-            return false;
-        }
+              <div className="mb-3 text-start">
+                <label className="form-label fw-semibold text-secondary">Nombre del emprendimiento</label>
+                <input
+                  type="text"
+                  name="nombreEmprendimiento"
+                  className="form-control"
+                    placeholder="Mi Emprendimiento"
+                  value={formData.nombreEmprendimiento}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        if (clave.trim() === "") {
-            setError("Ingrese una contraseña");
-            return false;
-        }
-
-        if (clave !== confirmarClave) {
-            setError("Las contraseñas no coinciden");
-            return false;
-        }
-
-        setError("");
-        return true;
-    }
-
-    function manejarSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (!validarDatos()) {
-            return;
-        }
-
-        setCargando(true);
-        setMensaje("");
-
-        // Acá después conectamos con el backend
-        // mediante POST /auth/register
-
-        console.log({
-            nombreCompleto,
-            nombreEmprendimiento,
-            email,
-            telefono,
-            clave
-        });
-
-        setMensaje("Datos válidos. Listo para registrar.");
-        setCargando(false);
-    }
-
-    return (
-        <div>
-            <h1>Registrar emprendedor</h1>
-
-            <form onSubmit={manejarSubmit}>
-
-                <div>
-                    <label>Nombre completo</label>
-                    <input
-                        type="text"
-                        value={nombreCompleto}
-                        onChange={(event) =>
-                            setNombreCompleto(event.target.value)
-                        }
-                    />
+              <div className="row">
+                <div className="col-md-6 mb-3 text-start">
+                  <label className="form-label fw-semibold text-secondary">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="form-control"
+                    placeholder="ejemplo@correo.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
 
-                <div>
-                    <label>Nombre del emprendimiento</label>
-                    <input
-                        type="text"
-                        value={nombreEmprendimiento}
-                        onChange={(event) =>
-                            setNombreEmprendimiento(event.target.value)
-                        }
-                    />
+                <div className="col-md-6 mb-3 text-start">
+                  <label className="form-label fw-semibold text-secondary">Teléfono</label>
+                  <input
+                    type="text"
+                    name="telefono"
+                    className="form-control"
+                    placeholder="(123) 456-7890"
+                    value={formData.telefono}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 mb-3 text-start">
+                  <label className="form-label fw-semibold text-secondary">Contraseña</label>
+                  <input
+                    type="password"
+                    name="password"
+                    className="form-control"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
 
-                <div>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(event) =>
-                            setEmail(event.target.value)
-                        }
-                    />
+                <div className="col-md-6 mb-4 text-start">
+                  <label className="form-label fw-semibold text-secondary">Confirmar contraseña</label>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    className="form-control"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
+              </div>
 
-                <div>
-                    <label>Teléfono</label>
-                    <input
-                        type="tel"
-                        value={telefono}
-                        onChange={(event) =>
-                            setTelefono(event.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>Contraseña</label>
-                    <input
-                        type="password"
-                        value={clave}
-                        onChange={(event) =>
-                            setClave(event.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>Confirmar contraseña</label>
-                    <input
-                        type="password"
-                        value={confirmarClave}
-                        onChange={(event) =>
-                            setConfirmarClave(event.target.value)
-                        }
-                    />
-                </div>
-
-                {error && <p>{error}</p>}
-
-                {mensaje && <p>{mensaje}</p>}
-
-                <button type="submit" disabled={cargando}>
-                    {cargando ? "Registrando..." : "Registrarse"}
-                </button>
-
+              <button type="submit" className="btn btn-primary w-100 py-2 fw-bold">
+                Registrarse
+              </button>
             </form>
+          </div>
         </div>
-    );
-}
-
-export default RegistroEmprendedor;
-
+      </div>
+    </div>
+  );
+};
+export default Registro;

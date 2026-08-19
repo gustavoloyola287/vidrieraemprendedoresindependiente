@@ -1,71 +1,54 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 
-function Login() {
-    const [email, setEmail] = useState("");
-    const [clave, setClave] = useState("");
-    const [error, setError] = useState("");
-    const [cargando, setCargando] = useState(false);
+export const Login: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    function validarDatos(): boolean {
-        if (email.trim() === "") {
-            setError("Ingrese su email");
-            return false;
-        }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Lógica de inicio de sesión
+  };
 
-        if (clave.trim() === "") {
-            setError("Ingrese su contraseña");
-            return false;
-        }
+  return (
+    <div className="container py-5">
+      <div className="row justify-content-center align-items-center min-vh-75">
+        <div className="col-12 col-sm-10 col-md-6 col-lg-4">
+          <div className="card shadow border-0 rounded-3 p-4 bg-white">
+            <h2 className="text-center fw-bold text-primary mb-4">Iniciar sesión</h2>
+            
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3 text-start">
+                <label className="form-label fw-semibold text-secondary">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="ejemplo@correo.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-        setError("");
-        return true;
-    }
+              <div className="mb-4 text-start">
+                <label className="form-label fw-semibold text-secondary">Contraseña</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-    function manejarSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        if (!validarDatos()) {
-            return;
-        }
-
-        setCargando(true);
-
-        // Acá después conectamos con el backend y JWT
-    }
-
-    return (
-        <div>
-            <h1>Iniciar sesión</h1>
-
-            <form onSubmit={manejarSubmit}>
-
-                <div>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>Contraseña</label>
-                    <input
-                        type="password"
-                        value={clave}
-                        onChange={(event) => setClave(event.target.value)}
-                    />
-                </div>
-
-                {error && <p>{error}</p>}
-
-                <button type="submit" disabled={cargando}>
-                    {cargando ? "Ingresando..." : "Iniciar sesión"}
-                </button>
-
+              <button type="submit" className="btn btn-primary w-100 py-2 fw-bold">
+                Iniciar sesión
+              </button>
             </form>
+          </div>
         </div>
-    );
-}
-
+      </div>
+    </div>
+  );
+};
 export default Login;

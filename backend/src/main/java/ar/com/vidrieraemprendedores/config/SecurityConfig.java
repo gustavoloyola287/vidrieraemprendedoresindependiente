@@ -41,7 +41,12 @@ public class SecurityConfig {
                     "/auth/**",
                     "/api/emprendedores/**",
                     "/emprendedores/**",
-                    "/api/v1/emprendedores/**"
+                    "/api/v1/emprendedores/**",
+                    "/api/productos/**",
+                    "/productos/**",
+                    "/api/categorias/**",
+                    "/categorias/**"
+
                 ).permitAll()
                 // Cualquier otra petición requerirá estar autenticado
                 .anyRequest().authenticated()

@@ -1,59 +1,80 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { type Emprendedor } from "../Types/Emprendedor";
-import CardEmprendedor from "../components/CardEmprendedor";
+import { type Producto } from "../Types/Producto";
+import { getProductos } from "../services/productoService";
+import { CardProducto } from "../components/CardProducto";
 
 function Home() {
-    const [emprendedores, setEmprendedores] = useState<Emprendedor[]>([]);
+    const [productos, setProductos] = useState<Producto[]>([]);
+    const [busqueda, setBusqueda] = useState("");
     const [error, setError] = useState("");
-
-    const navigate = useNavigate();
+    const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
-        const cargarEmprendedores = async () => {
+        const cargarProductos = async () => {
             try {
-                const respuesta = await fetch(
-                    "http://localhost:8080/api/emprendedores"
-                );
-
-                if (!respuesta.ok) {
-                    throw new Error("Error al obtener los emprendedores");
-                }
-
-                const datos: Emprendedor[] = await respuesta.json();
-                setEmprendedores(datos);
-            } catch (error) {
-                console.error(error);
-                setError("No se pudieron cargar los emprendedores");
+                const datos = await getProductos();
+                setProductos(datos);
+            } catch (err) {
+                console.error(err);
+                setError("No se pudieron cargar los productos de la vidriera");
+            } finally {
+                setCargando(false);
             }
         };
 
-        cargarEmprendedores();
+        cargarProductos();
     }, []);
 
-    const verPerfil = (id: number) => {
-        navigate(`/emprendedor/${id}`);
-    };
+    // Filtrado local según lo que tipees en el buscador
+    const productosFiltrados = productos.filter((prod) =>
+        prod.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        prod.categoria?.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        prod.emprendedor?.nombreEmprendimiento.toLowerCase().includes(busqueda.toLowerCase())
+    );
 
     return (
-        <>
-            <h1>Vidriera Virtual VCP</h1>
+        <div className="container py-4">
+            <h1 className="h2 font-bold text-primary mb-3">Vidriera Virtual de Emprendedores VCP</h1>
 
-            <input
-                type="text"
-                placeholder="Buscar emprendimiento..."
-            />
+            {/* Buscador adaptable con Bootstrap */}
+            <div className="row mb-4">
+                <div className="col-12 col-md-6 col-lg-5">
+                    <input
+                        type="text"
+                        placeholder="Buscar producto, categoría o emprendimiento..."
+                        value={busqueda}
+                        onChange={(e) => setBusqueda(e.target.value)}
+                        className="form-control shadow-sm"
+                    />
+                </div>
+            </div>
 
-            {error && <p>{error}</p>}
+            {error && <div className="alert alert-danger mb-4">{error}</div>}
 
-            {emprendedores.map((emprendedor) => (
-                <CardEmprendedor
-                    key={emprendedor.id}
-                    emprendedor={emprendedor}
-                    verPerfil={verPerfil}
-                />
-            ))}
-        </>
+            {cargando ? (
+                <div className="text-center my-5">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Cargando...</span>
+                    </div>
+                    <p className="mt-2 text-muted">Cargando productos...</p>
+                </div>
+            ) : (
+                /* Grilla Bootstrap: 2 columnas en móvil, 3 en tablet, 4 en PC */
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-2 g-sm-3">
+                    {productosFiltrados.map((producto) => (
+                        <div key={producto.id} className="col">
+                            <CardProducto producto={producto} />
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {!cargando && productosFiltrados.length === 0 && (
+                <p className="text-muted mt-4 text-center">
+                    No se encontraron productos que coincidan con la búsqueda.
+                </p>
+            )}
+        </div>
     );
 }
 
