@@ -112,12 +112,18 @@ export const CardProducto: React.FC<CardProductoProps> = ({ producto }) => {
                     <p className="text-muted mb-4" style={{ whiteSpace: 'pre-line' }}>
                       {producto.descripcion || "Sin descripción disponible."}
                     </p>
-
+                      {/*Tarjeta de contacto del emprendedor*/}
                     <div className="p-3 bg-light rounded-3 border">
-                      <p className="mb-1 text-muted fs-7">Ofrecido por:</p>
+                      <strong className="mb-1 text-dark fs-7">Ofrecido por:</strong>
                       <h6 className="fw-bold text-primary mb-0">
                         {producto.emprendedor?.nombreEmprendimiento || "Emprendedor VCP"}
                       </h6>
+                      <hr className="my-2" />
+                      {/*Telefono del emprendedor*/}
+                      <p className="mb-1 text-dark small d-flex align-items-center gap-2"></p>
+                      <strong className="text-seconary">Teléfono:  
+                        {producto.emprendedor?.telefono || "No disponible"}
+                      </strong>
                     </div>
                   </div>
                 </div>
