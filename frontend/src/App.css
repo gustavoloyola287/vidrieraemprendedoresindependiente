@@ -1,4 +1,8 @@
 body {
-  font-family: 'Poppins', sans-serif !important;
-  background-color: #f8f9fa;
+  font-family: 'Poppins', sans-serif;
+  color: #2D3748;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+  font-family: 'Jost', sans-serif;
 }

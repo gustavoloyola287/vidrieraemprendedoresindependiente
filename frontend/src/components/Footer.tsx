@@ -2,60 +2,42 @@ import React from 'react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-dark text-light pt-4 pb-3 mt-auto w-100">
-      <div className="container-fluid">
-        <div className="row gy-3 align-items-center">
+    <footer style={{ backgroundColor: '#181E2E', fontFamily: 'Jost, Poppins, sans-serif' }} className="text-white pt-5 pb-4 mt-auto">
+      <div className="container text-center text-md-start">
+        <div className="row">
           
-          {/* Columna 1: Marca Institucional */}
-          <div className="col-12 col-md-4 text-center text-md-start">
-            <h5 className="fw-bold text-white mb-1">
-              vcp<span className="text-primary">|</span>gob
-            </h5>
-            <p className="text-secondary small mb-0">
-              Vidriera Virtual de Emprendedores
+          {/* Marca / Municipio */}
+          <div className="col-md-4 col-lg-4 col-xl-3 mx-auto mb-4">
+            <h6 className="text-uppercase fw-bold mb-3" style={{ color: '#00A3B5' }}>
+              Vidriera de Emprendedores
+            </h6>
+            <p className="small text-white-50">
+              Impulsando el trabajo local, la innovación y el talento en Villa Carlos Paz.
             </p>
+            <div style={{ height: '3px', width: '50px', backgroundColor: '#F2C94C' }} className="mb-2"></div>
           </div>
 
-          {/* Columna 2: Enlaces Rápidos */}
-          <div className="col-12 col-md-4 text-center">
-            <ul className="list-inline mb-0 small">
-              <li className="list-inline-item mx-2">
-                <a href="/" className="text-secondary text-decoration-none hover-white">
-                  Inicio
-                </a>
-              </li>
-              <li className="list-inline-item mx-2 text-secondary">•</li>
-              <li className="list-inline-item mx-2">
-                <a href="/login" className="text-secondary text-decoration-none hover-white">
-                  Ingresar
-                </a>
-              </li>
-              <li className="list-inline-item mx-2 text-secondary">•</li>
-              <li className="list-inline-item mx-2">
-                <a href="/registro" className="text-secondary text-decoration-none hover-white">
-                  Registrarse
-                </a>
-              </li>
-            </ul>
+          {/* Enlaces Rápidos */}
+          <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <h6 className="text-uppercase fw-bold mb-3" style={{ color: '#00A3B5' }}>Navegación</h6>
+            <p className="mb-2"><a href="/" className="text-white-50 text-decoration-none">Inicio</a></p>
+            <p className="mb-2"><a href="/emprendedores" className="text-white-50 text-decoration-none">Emprendedores</a></p>
+            <p className="mb-2"><a href="/categorias" className="text-white-50 text-decoration-none">Categorías</a></p>
           </div>
 
-          {/* Columna 3: Copyright y Créditos */}
-          <div className="col-12 col-md-4 text-center text-md-end">
-            <p className="text-secondary small mb-0">
-              © {new Date().getFullYear()} Municipalidad de Villa Carlos Paz
-            </p>
-            <span className="text-muted" style={{ fontSize: '0.75rem' }}>
-              Desarrollado para el desarrollo local
-            </span>
+          {/* Contacto */}
+          <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <h6 className="text-uppercase fw-bold mb-3" style={{ color: '#00A3B5' }}>Contacto</h6>
+            <p className="text-white-50 small mb-2">📍 Municipalidad de Villa Carlos Paz</p>
+            <p className="text-white-50 small mb-2">✉️ empleo@villacarlospaz.gov.ar</p>
           </div>
 
         </div>
+      </div>
 
-        <hr className="my-3 border-secondary" />
-
-        <div className="text-center text-muted small" style={{ fontSize: '0.7rem' }}>
-          Todos los derechos reservados.
-        </div>
+      {/* Copyright Line */}
+      <div className="text-center p-3 border-top border-secondary border-opacity-25 mt-3 text-white-50 small">
+        © 2026 Municipalidad de Villa Carlos Paz — Secretaría de Empleo y Emprendedurismo
       </div>
     </footer>
   );
