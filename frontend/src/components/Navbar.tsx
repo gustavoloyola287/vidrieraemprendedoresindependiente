@@ -32,7 +32,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           vcp<span style={{ color: '#00A3B5', fontWeight: '300' }}>|</span>gob
           {/* Cambiamos a text-white-50 para que resalte claramente en el fondo oscuro */}
           <span className="fs-6 text-white-50 ms-2 d-none d-sm-inline fw-normal">
-            Vidriera Virtual
+            {/*Vidriera Virtual de Emprendedores*/}
           </span>
         </Link>
 
