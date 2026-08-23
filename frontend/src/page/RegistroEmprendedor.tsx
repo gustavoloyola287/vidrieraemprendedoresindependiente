@@ -22,7 +22,6 @@ export const Registro: React.FC = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Limpia el error del campo cuando el usuario escribe
     if (errors[e.target.name]) {
       setErrors({ ...errors, [e.target.name]: '' });
     }
@@ -64,7 +63,6 @@ export const Registro: React.FC = () => {
 
     setLoading(true);
 
-    // Payload sanitizado
     const payload = {
       nombreCompleto: formData.nombreCompleto.trim(),
       nombreEmprendimiento: formData.nombreEmprendimiento.trim(),
@@ -74,17 +72,36 @@ export const Registro: React.FC = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      // Ruta relativa que aprovecha el proxy de Vite
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
-
+      // Validamos si la respuesta del servidor NO fue exitosa (fuera del rango 200-299)
       if (!response.ok) {
-        throw new Error(data.message || 'Error al registrar el emprendedor.');
+        let errorMessage = `Error en el servidor (Código: ${response.status})`;
+        
+        try {
+          // Intentamos leer el mensaje enviado por el Backend si existe un cuerpo JSON
+          const errorData = await response.json();
+          if (errorData && errorData.message) {
+            errorMessage = errorData.message;
+          }
+        } catch {
+          // Si el Backend no devolvió JSON (ej. un 403 vacio de Spring Security)
+          if (response.status === 403) {
+            errorMessage = 'Acceso denegado: El endpoint de registro requiere permisos públicos en Spring Security.';
+          }
+        }
+
+        throw new Error(errorMessage);
       }
+
+      // Si llegó hasta aquí, la respuesta fue exitosa (200 OK / 201 Created)
+      const data = await response.json();
+      console.log('Registro exitoso:', data);
 
       // Redirección exitosa al Login
       navigate('/login');

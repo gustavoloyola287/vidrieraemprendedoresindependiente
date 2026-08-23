@@ -29,57 +29,57 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            // 1. Activamos CORS con nuestra configuración
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            // Deshabilitamos CSRF porque trabajamos con una API REST stateless con tokens JWT
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                // Endpoints libres (Auth y lectura de emprendedores/categorías/etc.)
-                .requestMatchers(
-                    "/auth/**",
-                    "/api/emprendedores/**",
-                    "/emprendedores/**",
-                    "/api/v1/emprendedores/**",
-                    "/api/productos/**",
-                    "/productos/**",
-                    "/api/categorias/**",
-                    "/categorias/**"
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        // 1. Activamos CORS con nuestra configuración
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        // Deshabilitamos CSRF porque trabajamos con una API REST stateless con tokens JWT
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+            // Endpoints libres (Auth y lectura de emprendedores/categorías/etc.)
+            .requestMatchers(
+                "/api/auth/**",
+                "/auth/**",
+                "/api/emprendedores/**",
+                "/emprendedores/**",
+                "/api/v1/emprendedores/**",
+                "/api/productos/**",
+                "/productos/**",
+                "/api/categorias/**",
+                "/categorias/**"
+            ).permitAll()
+            // Cualquier otra petición requerirá estar autenticado
+            .anyRequest().authenticated()
+        )
+        // No guardamos sesión en el servidor (STATELESS)
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
+        .authenticationProvider(authenticationProvider)
+        // Agregamos nuestro filtro de JWT antes del filtro de usuario/contraseña estándar
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-                ).permitAll()
-                // Cualquier otra petición requerirá estar autenticado
-                .anyRequest().authenticated()
-            )
-            // No guardamos sesión en el servidor (STATELESS)
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authenticationProvider(authenticationProvider)
-            // Agregamos nuestro filtro de JWT antes del filtro de usuario/contraseña estándar
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    return http.build();
+}
 
-        return http.build();
-    }
+// 2. Definimos las reglas de CORS para React / Vite
+@Bean
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    
+    // Puerto donde corre el frontend de tu compañero
+    configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+    
+    // Métodos HTTP permitidos
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+    
+    // Cabeceras permitidas
+    configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+    
+    configuration.setAllowCredentials(true);
 
-    // 2. Definimos las reglas de CORS para React / Vite
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        
-        // Puerto donde corre el frontend de tu compañero
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        
-        // Métodos HTTP permitidos
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        
-        // Cabeceras permitidas
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
-        
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+}
 }
