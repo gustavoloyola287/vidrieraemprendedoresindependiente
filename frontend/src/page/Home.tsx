@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { type Producto } from "../Types/Producto";
 import { getProductos } from "../services/productoService";
-import { CardProducto } from "../components/CardProducto";
+import { CardProducto } from "../Components/CardProducto";
 import { useNavigate } from "react-router-dom";
 import { type Emprendedor } from "../Types/Emprendedor";
 import CardEmprendedor from "../Components/CardEmprendedor";

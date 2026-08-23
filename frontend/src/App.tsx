@@ -1,44 +1,44 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from "./page/Home";
-import Login from "./page/Login";
-import RegistroEmprendedor from "./page/RegistroEmprendedor";
-import DetalleEmprendedor from "./page/DetalleEmprendedor";
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import  AuthProvider  from './Context/AuthContext';
+import { AuthProvider } from "./Context/AuthContext";
 import Navbar from './Components/Navbar';
-import Home from './Page/Home';
-import Login from './Page/Login';
-import RegistroEmprendedor from './Page/RegistroEmprendedor';
-import DetalleEmprendedor from './Page/DetalleEmprendedor';
+import Footer from './Components/Footer';
+import Home from "./Page/Home";
+import Login from "./Page/Login";
+import RegistroEmprendedor from "./Page/RegistroEmprendedor";
+import DetalleEmprendedor from "./Page/DetalleEmprendedor";
+import ProtectedRoute from "./Components/ProtectedRoute"; // Import de la ruta protegida
 
 function App() {
     return (
-    <AuthProvider>
+        <AuthProvider>
         <BrowserRouter>
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Home />} />
+            {/* Contenedor Flexbox que empuja el footer hacia abajo */}
+            <div className="d-flex flex-column min-vh-100">
+                <Navbar />
+                
+                <main className="flex-grow-1">
+                    <Routes>
+                        {/* Rutas Públicas */}
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/registro" element={<RegistroEmprendedor />} />
+                        <Route path="/emprendedor/:id" element={<DetalleEmprendedor />} />
 
-                <Route path="/login" element={<Login />} />
+                        {/* Ruta Protegida: requiere sesión activa */}
+                        <Route 
+                            path="/mis-productos" 
+                            element={
+                                <ProtectedRoute>
+                                    {/* Reemplazá este placeholder por tu componente de MisProductos */}
+                                    <div>Página de Mis Productos</div> 
+                                </ProtectedRoute>
+                            } 
+                        />
+                    </Routes>
+                </main>
 
-                <Route
-                    path="/registro"
-                    element={<RegistroEmprendedor />}
-                />
-
-                <Route
-                    path="/emprendedor/:id"
-                    element={<DetalleEmprendedor />}
-                />
-            </Routes>
-            </main>
-            <Footer />
-               
-        </div>
+                <Footer />
+            </div>
         </BrowserRouter>
         </AuthProvider>
     );
