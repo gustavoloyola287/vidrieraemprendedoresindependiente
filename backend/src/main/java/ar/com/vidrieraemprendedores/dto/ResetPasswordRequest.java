@@ -15,5 +15,5 @@ public class ResetPasswordRequest {
 
     @NotBlank(message = "La nueva contraseña es obligatoria")
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-    private String password;
+    private String newPassword;
 }
