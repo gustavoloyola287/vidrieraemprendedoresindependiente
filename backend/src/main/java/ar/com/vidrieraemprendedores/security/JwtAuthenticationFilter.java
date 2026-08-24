@@ -27,16 +27,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(
-            @Nonnull HttpServletRequest request,
-            @Nonnull HttpServletResponse response,
-            @Nonnull FilterChain filterChain
-    ) throws ServletException, IOException {
+protected void doFilterInternal(
+        @Nonnull HttpServletRequest request,
+        @Nonnull HttpServletResponse response,
+        @Nonnull FilterChain filterChain
+) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userEmail;
+    String path = request.getServletPath();
 
+    // 1. Dejamops pasar peticiones OPTIONS (CORS Preflight) y rutas públicas de auth
+    if ("OPTIONS".equalsIgnoreCase(request.getMethod()) || 
+        path.startsWith("/api/auth/") || 
+        path.startsWith("/auth/")) {
+        
+        filterChain.doFilter(request, response);
+        return;
+    }
+
+    final String authHeader = request.getHeader("Authorization");
+    final String jwt;
+    final String userEmail;
+
+    // Si no hay encabezado o no empieza con Bearer, continuamos la cadena de filtros normalmente
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
         // 1. Verificar si la cabecera trae el prefijo "Bearer "
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);

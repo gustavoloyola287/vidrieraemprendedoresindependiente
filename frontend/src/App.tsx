@@ -6,8 +6,8 @@ import Home from "./Page/Home";
 import Login from "./Page/Login";
 import RegistroEmprendedor from "./Page/RegistroEmprendedor";
 import DetalleEmprendedor from "./Page/DetalleEmprendedor";
-import ProtectedRoute from "./Components/ProtectedRoute"; // Import de la ruta protegida
-
+import ProtectedRoute from "./Components/ProtectedRoute";
+import { RecuperarPassword } from "./Page/RecuperarPassword";
 function App() {
     return (
         <AuthProvider>
@@ -34,6 +34,7 @@ function App() {
                                 </ProtectedRoute>
                             } 
                         />
+                        <Route path="/recuperar-password" element={<RecuperarPassword />} />
                     </Routes>
                 </main>
 

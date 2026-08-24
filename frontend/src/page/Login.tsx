@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext'; // Ajusta la ruta de importación según tu estructura
 
 export const Login: React.FC = () => {
@@ -94,6 +95,14 @@ export const Login: React.FC = () => {
               <button type="submit" className="btn btn-primary w-100 py-2 fw-bold" disabled={loading}>
                 {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </button>
+              <div className="mt-4 text-center">
+  <Link 
+    to="/recuperar-password" 
+    className="text-blue-600 hover:underline text-sm font-medium"
+  >
+    ¿Olvidaste tu contraseña?
+  </Link>
+</div>
             </form>
           </div>
         </div>
