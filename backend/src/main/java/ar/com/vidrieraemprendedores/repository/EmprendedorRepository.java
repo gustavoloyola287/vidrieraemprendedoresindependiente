@@ -12,4 +12,7 @@ public interface EmprendedorRepository extends JpaRepository<Emprendedor, Long> 
 
     // Método para buscar un emprendedor por su email   
     Optional <Emprendedor> findByEmail(String email);
+
+    // Método para buscar un emprendedor por su token de recuperación de contraseña
+    Optional<Emprendedor> findByResetPasswordToken(String token);
 }

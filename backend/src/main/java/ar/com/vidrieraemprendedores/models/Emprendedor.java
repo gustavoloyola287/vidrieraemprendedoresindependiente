@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "emprendedores")
@@ -52,7 +53,14 @@ public class Emprendedor implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'ROLE_EMPRENDEDOR'")
-    private Rol rol;
+    private Rol rol = Rol.ROLE_EMPRENDEDOR;
+
+    // Recuperación de contraseña
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_token_expiration")
+    private LocalDateTime resetPasswordTokenExpiry;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
