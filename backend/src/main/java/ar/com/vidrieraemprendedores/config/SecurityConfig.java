@@ -47,6 +47,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                 "/productos/**",
                 "/api/categorias/**",
                 "/categorias/**"
+
             ).permitAll()
             // Cualquier otra petición requerirá estar autenticado
             .anyRequest().authenticated()
