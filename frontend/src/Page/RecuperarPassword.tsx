@@ -10,78 +10,88 @@ export const RecuperarPassword: React.FC = () => {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccessMessage(null);
-    setLoading(true);
+        e.preventDefault();
+        setError(null);
+        setSuccessMessage(null);
+        setLoading(true);
 
         try {
-        // Simulación de llamada al backend (/api/auth/recover-password) [US-08]
-        console.log('Solicitando recuperación para:', email);
-        
-        // Simulo respuesta exitosa para la demo de mañana
-        setTimeout(() => {
-            setLoading(false);
-            setSuccessMessage('Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.');
-        }, 1000);
+            // Simulación de llamada al backend (/api/auth/recover-password)
+            console.log('Solicitando recuperación para:', email);
+            
+            setTimeout(() => {
+                setLoading(false);
+                setSuccessMessage('Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.');
+            }, 1000);
 
         } catch (err) {
-        setLoading(false);
-        setError('Ocurrió un error al procesar la solicitud. Intenta nuevamente.');
+            setLoading(false);
+            setError('Ocurrió un error al procesar la solicitud. Intenta nuevamente.');
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-md text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Recuperar Contraseña</h2>
-            <p className="text-sm text-gray-600 mb-6">
-            Ingresa tu correo electrónico registrado y te enviaremos las instrucciones.
+        <div className="container d-flex flex-column justify-content-center align-items-center py-5 min-vh-100">
+            {/* Título alineado al centro en azul brillante (#0066FF) */}
+            <h2 className="fw-bold mb-2 text-center" style={{ color: '#0066FF' }}>
+                Recuperar Contraseña
+            </h2>
+            
+            <p className="text-muted text-center mb-4" style={{ maxWidth: '450px' }}>
+                Ingresa tu correo electrónico registrado y te enviaremos las instrucciones.
             </p>
 
-            {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4 text-sm">
-                {error}
+            {/* Tarjeta contenedora para encuadrar formulario y botón */}
+            <div className="card shadow-sm p-4 w-100 border-0 rounded-4" style={{ maxWidth: '420px' }}>
+                {error && (
+                    <div className="alert alert-danger text-center mb-3 text-sm" role="alert">
+                        {error}
+                    </div>
+                )}
+
+                {successMessage && (
+                    <div className="alert alert-success text-center mb-3 text-sm" role="alert">
+                        {successMessage}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3 text-start">
+                        <label className="form-label fw-semibold text-secondary">
+                            Correo Electrónico
+                        </label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="ejemplo@correo.com"
+                            className="form-control py-2"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn w-100 py-2 fw-bold text-white mb-3"
+                        style={{ backgroundColor: '#0066FF', borderColor: '#0066FF' }}
+                    >
+                        {loading ? 'Enviando...' : 'Enviar enlace'}
+                    </button>
+                </form>
+
+                {/* Botón dentro de la tarjeta con separación adecuada */}
+                <div className="text-center pt-2 border-top">
+                    <button
+                        type="button"
+                        onClick={() => navigate('/login')}
+                        className="btn btn-link text-decoration-none fw-semibold p-0"
+                        style={{ color: '#0066FF' }}
+                    >
+                        ← Volver al inicio de sesión
+                    </button>
+                </div>
             </div>
-            )}
-
-            {successMessage && (
-            <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-4 text-sm">
-                {successMessage}
-            </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4 text-left">
-            <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Correo Electrónico
-                </label>
-                <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="ejemplo@correo.com"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
-
-            <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-            >
-                {loading ? 'Enviando...' : 'Enviar enlace'}
-            </button>
-            </form>
-
-            <button
-            onClick={() => navigate('/login')}
-            className="mt-6 text-sm text-blue-600 hover:underline inline-block"
-            >
-            ← Volver al inicio de sesión
-            </button>
-        </div>
         </div>
     );
-    };
+};

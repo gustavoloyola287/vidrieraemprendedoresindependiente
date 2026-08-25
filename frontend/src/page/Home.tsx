@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { type Producto } from "../Types/Producto";
 import { productoService } from "../services/productoService";
-import { CardProducto } from "../components/CardProducto";
+import { CardProducto } from "../Components/CardProducto";
 
 export const Home = () => {
     const [productos, setProductos] = useState<Producto[]>([]);

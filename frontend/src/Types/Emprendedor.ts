@@ -1,4 +1,5 @@
 export interface Emprendedor {
+    nombreComercial: any;
     id: number;
     nombreCompleto: string;
     descripcion: string;
