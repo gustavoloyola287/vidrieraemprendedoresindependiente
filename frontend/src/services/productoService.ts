@@ -1,4 +1,4 @@
-import api from '../api';
+import {api} from './api';
 import type { Producto, Categoria } from '../Types/Producto';
 
 export const productoService = {

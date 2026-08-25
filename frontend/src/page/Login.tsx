@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../Context/AuthContext'; // Ajusta la ruta de importación según tu estructura
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../Context/AuthContext';
+import { api } from '../services/api'; // Usamos la instancia centralizada de Axios
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -26,25 +26,30 @@ export const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailTrimmed, password })
+      // Usamos api para apuntar automáticamente a http://localhost:8080/api
+      const response = await api.post('/auth/login', {
+        email: emailTrimmed,
+        password,
       });
 
-      const data = await response.json();
+      const { token } = response.data;
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Credenciales inválidas.');
-      }
+      // 1. Guardamos el token en localStorage para el interceptor de api.ts
+      localStorage.setItem('token', token);
 
-      // Guardar token y actualizar estado global de autenticación
-      login(data.token);
+      // 2. Actualizamos el estado global de autenticación
+      login(token);
 
-      // Redirigir al inicio o panel
+      // 3. Redirigimos
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Error al conectar con el servidor.');
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else if (err.code === 'ERR_NETWORK') {
+        setError('No se pudo conectar con el servidor.');
+      } else {
+        setError('Credenciales inválidas o error inesperado.');
+      }
     } finally {
       setLoading(false);
     }
@@ -55,17 +60,21 @@ export const Login: React.FC = () => {
       <div className="row justify-content-center align-items-center min-vh-75">
         <div className="col-12 col-sm-10 col-md-6 col-lg-4">
           <div className="card shadow border-0 rounded-3 p-4 bg-white">
-            <h2 className="text-center fw-bold text-primary mb-4">Iniciar sesión</h2>
+            <h2 className="text-center fw-bold mb-4" style={{ color: '#0066FF' }}>
+              Iniciar sesión
+            </h2>
 
             {error && (
-              <div className="alert alert-danger py-2 text-center" role="alert">
+              <div className="alert alert-danger py-2 text-center text-sm" role="alert">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleSubmit} noValidate>
               <div className="mb-3 text-start">
-                <label htmlFor="loginEmail" className="form-label fw-semibold text-secondary">Email</label>
+                <label htmlFor="loginEmail" className="form-label fw-semibold text-secondary">
+                  Email
+                </label>
                 <input
                   id="loginEmail"
                   type="email"
@@ -79,7 +88,9 @@ export const Login: React.FC = () => {
               </div>
 
               <div className="mb-4 text-start">
-                <label htmlFor="loginPassword" className="form-label fw-semibold text-secondary">Contraseña</label>
+                <label htmlFor="loginPassword" className="form-label fw-semibold text-secondary">
+                  Contraseña
+                </label>
                 <input
                   id="loginPassword"
                   type="password"
@@ -92,17 +103,24 @@ export const Login: React.FC = () => {
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary w-100 py-2 fw-bold" disabled={loading}>
+              <button
+                type="submit"
+                className="btn w-100 py-2 fw-bold text-white"
+                style={{ backgroundColor: '#0066FF', borderColor: '#0066FF' }}
+                disabled={loading}
+              >
                 {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </button>
+
               <div className="mt-4 text-center">
-  <Link 
-    to="/recuperar-password" 
-    className="text-blue-600 hover:underline text-sm font-medium"
-  >
-    ¿Olvidaste tu contraseña?
-  </Link>
-</div>
+                <Link
+                  to="/recuperar-password"
+                  className="text-decoration-none fw-semibold text-sm"
+                  style={{ color: '#0066FF' }}
+                >
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
             </form>
           </div>
         </div>
