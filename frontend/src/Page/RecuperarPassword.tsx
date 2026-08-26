@@ -7,21 +7,20 @@ export const RecuperarPassword: React.FC = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        setSuccessMessage(null);
         setLoading(true);
 
         try {
-            // Simulación de llamada al backend (/api/auth/recover-password)
+            // Simulación de llamada al backend
             console.log('Solicitando recuperación para:', email);
             
             setTimeout(() => {
                 setLoading(false);
-                setSuccessMessage('Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.');
+                setIsSubmitted(true);
             }, 1000);
 
         } catch (err) {
@@ -32,7 +31,6 @@ export const RecuperarPassword: React.FC = () => {
 
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center py-5 min-vh-100">
-            {/* Título alineado al centro en azul brillante (#0066FF) */}
             <h2 className="fw-bold mb-2 text-center" style={{ color: '#0066FF' }}>
                 Recuperar Contraseña
             </h2>
@@ -41,7 +39,6 @@ export const RecuperarPassword: React.FC = () => {
                 Ingresa tu correo electrónico registrado y te enviaremos las instrucciones.
             </p>
 
-            {/* Tarjeta contenedora para encuadrar formulario y botón */}
             <div className="card shadow-sm p-4 w-100 border-0 rounded-4" style={{ maxWidth: '420px' }}>
                 {error && (
                     <div className="alert alert-danger text-center mb-3 text-sm" role="alert">
@@ -49,38 +46,43 @@ export const RecuperarPassword: React.FC = () => {
                     </div>
                 )}
 
-                {successMessage && (
-                    <div className="alert alert-success text-center mb-3 text-sm" role="alert">
-                        {successMessage}
+                {!isSubmitted ? (
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-3 text-start">
+                            <label htmlFor="email" className="form-label fw-semibold text-secondary">
+                                Correo Electrónico
+                            </label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="ejemplo@correo.com"
+                                className="form-control py-2"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="btn w-100 py-2 fw-bold text-white mb-3"
+                            style={{ backgroundColor: '#0066FF', borderColor: '#0066FF' }}
+                        >
+                            {loading ? 'Enviando...' : 'Enviar enlace'}
+                        </button>
+                    </form>
+                ) : (
+                    <div className="text-center py-3">
+                        <div className="mb-3 fs-1" style={{ color: '#0066FF' }}>✉️</div>
+                        <h4 className="fw-bold mb-2 text-dark">¡Correo enviado!</h4>
+                        <p className="text-muted small mb-4">
+                            Revisá tu bandeja de entrada. Si el correo está registrado, te enviamos un enlace para restablecer tu contraseña (no olvides revisar la carpeta de spam).
+                        </p>
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3 text-start">
-                        <label className="form-label fw-semibold text-secondary">
-                            Correo Electrónico
-                        </label>
-                        <input
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="ejemplo@correo.com"
-                            className="form-control py-2"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn w-100 py-2 fw-bold text-white mb-3"
-                        style={{ backgroundColor: '#0066FF', borderColor: '#0066FF' }}
-                    >
-                        {loading ? 'Enviando...' : 'Enviar enlace'}
-                    </button>
-                </form>
-
-                {/* Botón dentro de la tarjeta con separación adecuada */}
                 <div className="text-center pt-2 border-top">
                     <button
                         type="button"

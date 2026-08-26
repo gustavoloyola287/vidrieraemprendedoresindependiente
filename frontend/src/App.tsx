@@ -10,6 +10,7 @@ import ProtectedRoute from "./Components/ProtectedRoute"; // Import de la ruta p
 import { CategoriasPage } from "./Page/CategoriasPage";
 import { EmprendedoresPage } from "./Page/EmprendedoresPage";
 import { RecuperarPassword } from "./Page/RecuperarPassword";
+import { RestablecerPassword } from "./Page/RestablecerPassword";
 function App() {
     return (
         <AuthProvider>
@@ -27,6 +28,7 @@ function App() {
                         <Route path="/emprendedor/:id" element={<DetalleEmprendedor />} />
                         <Route path="/categorias" element={<CategoriasPage />} />
                         <Route path="/emprendedores" element={<EmprendedoresPage />} />
+                        <Route path="/restablecer-password" element={<RestablecerPassword />} />
                         {/* Ruta Protegida: requiere sesión activa */}
                         <Route 
                             path="/mis-productos" 
@@ -40,7 +42,7 @@ function App() {
                         <Route path="/recuperar-password" element={<RecuperarPassword />} />
                     </Routes>
                 </main>
-
+                    
                 <Footer />
             </div>
         </BrowserRouter>
