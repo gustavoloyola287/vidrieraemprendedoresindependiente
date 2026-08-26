@@ -11,6 +11,7 @@ import { CategoriasPage } from "./Page/CategoriasPage";
 import { EmprendedoresPage } from "./Page/EmprendedoresPage";
 import { RecuperarPassword } from "./Page/RecuperarPassword";
 import { RestablecerPassword } from "./Page/RestablecerPassword";
+import { FormularioEmprendedor } from "./Page/FormularioEmprendedor";
 function App() {
     return (
         <AuthProvider>
@@ -40,6 +41,7 @@ function App() {
                             } 
                         />
                         <Route path="/recuperar-password" element={<RecuperarPassword />} />
+                        <Route path="/formulario-emprendedor" element={<FormularioEmprendedor />} />
                     </Routes>
                 </main>
                     
