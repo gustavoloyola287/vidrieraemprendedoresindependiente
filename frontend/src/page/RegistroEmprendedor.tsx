@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-export const Registro: React.FC = () => {
-  const navigate = useNavigate();
+interface RegistroProps {
+  onRegistroExitoso?: () => void;
+}
 
+export const Registro: React.FC<RegistroProps> = ({ onRegistroExitoso }) => {
   const [formData, setFormData] = useState({
     nombreCompleto: '',
     nombreEmprendimiento: '',
@@ -72,39 +73,31 @@ export const Registro: React.FC = () => {
     };
 
     try {
-      // Ruta relativa que aprovecha el proxy de Vite
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
 
-      // Validamos si la respuesta del servidor NO fue exitosa (fuera del rango 200-299)
       if (!response.ok) {
         let errorMessage = `Error en el servidor (Código: ${response.status})`;
-        
         try {
-          // Intentamos leer el mensaje enviado por el Backend si existe un cuerpo JSON
           const errorData = await response.json();
           if (errorData && errorData.message) {
             errorMessage = errorData.message;
           }
         } catch {
-          // Si el Backend no devolvió JSON (ej. un 403 vacio de Spring Security)
           if (response.status === 403) {
-            errorMessage = 'Acceso denegado: El endpoint de registro requiere permisos públicos en Spring Security.';
+            errorMessage = 'Acceso denegado: El endpoint requiere permisos públicos en Spring Security.';
           }
         }
-
         throw new Error(errorMessage);
       }
 
-      // Si llegó hasta aquí, la respuesta fue exitosa (200 OK / 201 Created)
-      const data = await response.json();
-      console.log('Registro exitoso:', data);
-
-      // Redirección exitosa al Login
-      navigate('/login');
+      // Avanza al Paso 2 tras registrar las credenciales
+      if (onRegistroExitoso) {
+        onRegistroExitoso();
+      }
     } catch (err: any) {
       setApiError(err.message || 'Error de conexión con el servidor.');
     } finally {
@@ -117,7 +110,13 @@ export const Registro: React.FC = () => {
       <div className="row justify-content-center align-items-center">
         <div className="col-12 col-sm-10 col-md-8 col-lg-6">
           <div className="card shadow border-0 rounded-3 p-4 bg-white">
-            <h2 className="text-center fw-bold text-primary mb-4">Registrar emprendedor</h2>
+            <h2 className="text-center fw-bold text-primary mb-2">Registrar emprendedor</h2>
+            <p className="text-center text-muted small mb-4">Paso 1: Datos de la cuenta</p>
+
+            {/* Alerta de recordatorio de contraseña */}
+            <div className="alert alert-warning py-2 text-center small mb-3" role="alert">
+              💡 <strong>Recordatorio:</strong> Por favor anotá tu clave en un lugar seguro.
+            </div>
 
             {apiError && (
               <div className="alert alert-danger py-2 text-center" role="alert">
@@ -226,7 +225,7 @@ export const Registro: React.FC = () => {
               </div>
 
               <button type="submit" className="btn btn-primary w-100 py-2 fw-bold" disabled={loading}>
-                {loading ? 'Registrando...' : 'Registrarse'}
+                {loading ? 'Registrando...' : 'Siguiente (Paso 2)'}
               </button>
             </form>
           </div>
@@ -235,5 +234,3 @@ export const Registro: React.FC = () => {
     </div>
   );
 };
-
-export default Registro;

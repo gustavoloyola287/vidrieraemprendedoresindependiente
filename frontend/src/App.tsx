@@ -4,7 +4,7 @@ import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import Home from "./Page/Home";
 import Login from "./Page/Login";
-import RegistroEmprendedor from "./Page/RegistroEmprendedor";
+import registrowizard from "./Components/RegistroWizard";
 import DetalleEmprendedor from "./Page/DetalleEmprendedor";
 import ProtectedRoute from "./Components/ProtectedRoute"; // Import de la ruta protegida
 import { CategoriasPage } from "./Page/CategoriasPage";
