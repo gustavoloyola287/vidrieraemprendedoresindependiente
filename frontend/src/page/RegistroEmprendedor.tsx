@@ -234,3 +234,5 @@ export const Registro: React.FC<RegistroProps> = ({ onRegistroExitoso }) => {
     </div>
   );
 };
+
+export default Registro;

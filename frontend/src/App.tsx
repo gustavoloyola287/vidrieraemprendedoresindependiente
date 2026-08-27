@@ -4,7 +4,8 @@ import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import Home from "./Page/Home";
 import Login from "./Page/Login";
-import registrowizard from "./Components/RegistroWizard";
+import {RegistroWizard} from "./Components/RegistroWizard";
+import  RegistroEmprendedor  from "./Page/RegistroEmprendedor";
 import DetalleEmprendedor from "./Page/DetalleEmprendedor";
 import ProtectedRoute from "./Components/ProtectedRoute"; // Import de la ruta protegida
 import { CategoriasPage } from "./Page/CategoriasPage";
@@ -30,6 +31,7 @@ function App() {
                         <Route path="/categorias" element={<CategoriasPage />} />
                         <Route path="/emprendedores" element={<EmprendedoresPage />} />
                         <Route path="/restablecer-password" element={<RestablecerPassword />} />
+                        <Route path="/registro-wizard" element={<RegistroWizard />} />
                         {/* Ruta Protegida: requiere sesión activa */}
                         <Route 
                             path="/mis-productos" 
