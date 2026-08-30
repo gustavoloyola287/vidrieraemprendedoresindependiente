@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../services/api'; // Asegurate de que la ruta sea correcta según tu estructura
 
 export const RecuperarPassword: React.FC = () => {
     const navigate = useNavigate();
@@ -12,20 +13,33 @@ export const RecuperarPassword: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+
+        const emailTrimmed = email.trim().toLowerCase();
+
+        if (!emailTrimmed) {
+            setError('Por favor ingresa tu correo electrónico.');
+            return;
+        }
+
         setLoading(true);
 
         try {
-            // Simulación de llamada al backend
-            console.log('Solicitando recuperación para:', email);
-            
-            setTimeout(() => {
-                setLoading(false);
-                setIsSubmitted(true);
-            }, 1000);
+            // Petición real al backend usando tu instancia centralizada de Axios
+            await api.patch('/auth/recover-password', {
+                email: emailTrimmed,
+            });
 
-        } catch (err) {
+            setIsSubmitted(true);
+        } catch (err: any) {
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else if (err.code === 'ERR_NETWORK') {
+                setError('No se pudo conectar con el servidor.');
+            } else {
+                setError('Ocurrió un error al procesar la solicitud. Intenta nuevamente.');
+            }
+        } finally {
             setLoading(false);
-            setError('Ocurrió un error al procesar la solicitud. Intenta nuevamente.');
         }
     };
 

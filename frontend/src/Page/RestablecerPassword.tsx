@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { api } from '../services/api'; // Instancia centralizada de Axios
 
 export const RestablecerPassword: React.FC = () => {
     const navigate = useNavigate();
@@ -20,6 +21,11 @@ export const RestablecerPassword: React.FC = () => {
         e.preventDefault();
         setError(null);
 
+        if (!token) {
+            setError('Falta el token de recuperación en la URL.');
+            return;
+        }
+
         // Validaciones de negocio en el Frontend
         if (password !== confirmPassword) {
             setError('Las contraseñas no coinciden.');
@@ -34,17 +40,23 @@ export const RestablecerPassword: React.FC = () => {
         setLoading(true);
 
         try {
-            // Petición al backend (simulada por ahora)
-            console.log('Enviando al backend -> Token:', token, 'Nueva clave:', password);
+            // Petición real al backend
+            await api.post('/auth/reset-password', {
+                token: token,
+                newPassword: password,
+            });
 
-            setTimeout(() => {
-                setLoading(false);
-                setIsSuccess(true);
-            }, 1000);
-
-        } catch (err) {
+            setIsSuccess(true);
+        } catch (err: any) {
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else if (err.code === 'ERR_NETWORK') {
+                setError('No se pudo conectar con el servidor.');
+            } else {
+                setError('El enlace de recuperación es inválido o ha expirado.');
+            }
+        } finally {
             setLoading(false);
-            setError('El enlace de recuperación es inválido o ha expirado.');
         }
     };
 
@@ -59,7 +71,6 @@ export const RestablecerPassword: React.FC = () => {
             </p>
 
             <div className="card shadow-sm p-4 w-100 border-0 rounded-4" style={{ maxWidth: '420px' }}>
-                {/* Mensaje de error general/validación */}
                 {error && (
                     <div className="alert alert-danger text-center mb-3 text-sm" role="alert">
                         {error}
@@ -67,7 +78,6 @@ export const RestablecerPassword: React.FC = () => {
                 )}
 
                 {!isSuccess ? (
-                    /* ESTADO 1: Formulario de ingreso de clave */
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3 text-start">
                             <label htmlFor="password" className="form-label fw-semibold text-secondary">
@@ -111,7 +121,6 @@ export const RestablecerPassword: React.FC = () => {
                         </button>
                     </form>
                 ) : (
-                    /* ESTADO 2: Confirmación de éxito */
                     <div className="text-center py-3">
                         <div className="mb-3 fs-1 text-success">✓</div>
                         <h4 className="fw-bold mb-2 text-dark">¡Contraseña actualizada!</h4>
