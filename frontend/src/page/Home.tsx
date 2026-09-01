@@ -25,11 +25,16 @@ export const Home = () => {
         cargarProductos();
     }, []);
 
-    const productosFiltrados = productos.filter((prod) =>
-        prod.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-        prod.categoria?.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
-        prod.emprendedor?.nombreComercial?.toLowerCase().includes(busqueda.toLowerCase())
-    );
+    const productosFiltrados = productos.filter((prod) => {
+        const nombre = prod.nombre?.toLowerCase() ?? "";
+        const categoria = prod.categoria?.nombre?.toLowerCase() ?? "";
+        const emprendimiento = prod.emprendedor?.nombre?.toLowerCase() ?? "";
+        const busquedaLower = busqueda.toLowerCase();
+
+        return nombre.includes(busquedaLower) ||
+            categoria.includes(busquedaLower) ||
+            emprendimiento.includes(busquedaLower);
+    });
 
     return (
         <div className="container py-4">
